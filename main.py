@@ -22,19 +22,30 @@ data = pandas.read_csv("50_states.csv")
 
 guess_on = True
 correct_answer = 0
+guess_states = []
 
-while guess_on:
+while len(guess_states) < 50:
     answer_state = screen.textinput(title=f"Guess the State {correct_answer}/50", prompt="What's another state's name?").title()
     state_row = data[data["state"] == answer_state]
-    if answer_state != "end":
-        if not state_row.empty:
-            xcor = int(state_row.x)
-            ycor = int(state_row.y)
-            state_position = [xcor, ycor]
-            state_name.draw_name(state_position, answer_state)
-            correct_answer += 1
-    elif answer_state == "end":
-        guess_on = False
+    if answer_state == "Exit":
+        break
+    elif not state_row.empty:
+        guess_states.append(answer_state)
+        xcor = int(state_row.x)
+        ycor = int(state_row.y)
+        state_position = [xcor, ycor]
+        state_name.draw_name(state_position, answer_state)
+        correct_answer += 1
+
+
+
+state_list = data["state"].to_list()
+for state in guess_states:
+    if state in state_list:
+        state_list.remove(state)
+state_not_guessed = pandas.DataFrame(state_list)
+state_not_guessed.to_csv("remaining_states.csv")
+print(len(state_not_guessed))
 
 
 
@@ -69,4 +80,3 @@ while guess_on:
 # # screen.onscreenclick(get_mouse_click_coor)
 #
 #
-screen.mainloop()
