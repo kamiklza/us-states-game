@@ -40,12 +40,16 @@ while len(guess_states) < 50:
 
 
 state_list = data["state"].to_list()
-for state in guess_states:
-    if state in state_list:
-        state_list.remove(state)
-state_not_guessed = pandas.DataFrame(state_list)
+new_list = []
+new_list = [state for state in state_list if state not in guess_states]
+
+# for state in guess_states:
+#     if state in state_list:
+#         state_list.remove(state)
+
+state_not_guessed = pandas.DataFrame(new_list)
 state_not_guessed.to_csv("remaining_states.csv")
-print(len(state_not_guessed))
+
 
 
 
